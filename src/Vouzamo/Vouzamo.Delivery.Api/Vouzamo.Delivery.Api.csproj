@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>aspnet-Vouzamo.Delivery.Api-847610C4-94EC-4D34-ABD4-A8F61D56C609</UserSecretsId>
+    <Authors>John Askew</Authors>
+    <Company>Vouzamo</Company>
+    <Product>Vouzamo CMS</Product>
+    <Description />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview2-final" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0-preview2-final" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vouzamo.Common\Vouzamo.Common.csproj" />
+    <ProjectReference Include="..\Vouzamo.Delivery\Vouzamo.Delivery.csproj" />
+    <ProjectReference Include="..\Vouzamo.Manager\Vouzamo.Manager.csproj" />
+    <ProjectReference Include="..\Vouzamo.Persistance\Vouzamo.Persistance.csproj" />
+  </ItemGroup>
+
+</Project>
