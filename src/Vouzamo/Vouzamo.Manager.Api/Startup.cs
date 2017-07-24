@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Vouzamo.Common.Converters;
 using Vouzamo.Common.Services;
 using Vouzamo.Common.UnitOfWork;
-using Vouzamo.Manager.Api.Filters;
+using Vouzamo.Manager.Api.Attributes;
 using Vouzamo.Manager.Services;
 using Vouzamo.Persistence.Context;
 using Vouzamo.Persistence.UnitOfWork;
@@ -29,6 +29,7 @@ namespace Vouzamo.Manager.Api
             services.AddDbContext<ManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Manager")));
 
             services.AddMvc(c => {
+                c.Filters.Add(new ModelStateFilterAttribute());
                 c.Filters.Add(new ErrorFilterAttribute());
             }).AddJsonOptions(o => ConfigureJsonOptions(o));
 

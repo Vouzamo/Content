@@ -3,7 +3,7 @@ using Vouzamo.Common.Models.Errors;
 using Vouzamo.Common.Models.Types;
 using Vouzamo.Manager.Api.Extensions;
 
-namespace Vouzamo.Manager.Api.Filters
+namespace Vouzamo.Manager.Api.Attributes
 {
     public class ErrorFilterAttribute : ExceptionFilterAttribute
     {
