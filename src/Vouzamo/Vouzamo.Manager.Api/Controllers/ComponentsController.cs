@@ -16,5 +16,12 @@ namespace Vouzamo.Manager.Api.Controllers
         {
             ManagerUnitOfWork = managerUnitOfWork;
         }
+
+        public override void Validate(ComponentItem resource)
+        {
+            base.Validate(resource);
+
+            // validation
+        }
     }
 }

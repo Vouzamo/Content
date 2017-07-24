@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Vouzamo.Common;
 using Vouzamo.Common.Persistence;
+using Vouzamo.Common.Models.Errors;
+using Vouzamo.Common.Models.Types;
 
 namespace Vouzamo.Persistence
 {
@@ -38,7 +40,16 @@ namespace Vouzamo.Persistence
 
         public T Get(TId id)
         {
-            return DbSet.OfType<T>().SingleOrDefault(x => x.Id.Equals(id));
+            try
+            {
+                var entity = DbSet.OfType<T>().Single(x => x.Id.Equals(id));
+
+                return entity;
+            }
+            catch(Exception ex)
+            {
+                throw new ErrorException(ex, ErrorType.General, $"Couldn't find {typeof(T).Name} with id {id.ToString()}");
+            }
         }
 
         public void Add(T entity)

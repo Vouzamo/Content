@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Vouzamo.Common.Persistence;
+using Vouzamo.Common.Models.Errors;
+using Vouzamo.Common.Models.Types;
 
 namespace Vouzamo.Manager.Api.Controllers
 {
@@ -13,86 +15,66 @@ namespace Vouzamo.Manager.Api.Controllers
         [HttpGet]
         public IActionResult Get(int page = 1, int pageSize = int.MaxValue)
         {
-            try
-            {
-                var resources = UnitOfWork.Repository<T, TKey>().Page(page, pageSize);
+            var resources = UnitOfWork.Repository<T, TKey>().Page(page, pageSize);
 
-                return new OkObjectResult(resources);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex);
-            }
+            return new OkObjectResult(resources);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(TKey id)
         {
-            try
-            {
-                var resource = UnitOfWork.Repository<T, TKey>().Get(id);
+            var resource = UnitOfWork.Repository<T, TKey>().Get(id);
 
-                return new OkObjectResult(resource);
-            }
-            catch(Exception ex)
-            {
-                return new BadRequestObjectResult(ex);
-            }
+            return new OkObjectResult(resource);
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] T resource)
         {
-            try
-            {
-                UnitOfWork.Repository<T, TKey>().Add(resource);
-                UnitOfWork.Complete();
+            Validate(resource);
 
-                return new CreatedAtRouteResult(new { action = "Get", id = resource.Id }, resource);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex);
-            }
+            UnitOfWork.Repository<T, TKey>().Add(resource);
+            UnitOfWork.Complete();
+
+            return new CreatedAtRouteResult(new { action = "Get", id = resource.Id }, resource);
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(TKey id, [FromBody] T resource)
         {
-            try
-            {
-                if(!id.Equals(resource.Id))
-                {
-                    throw new ArgumentException("id mismatch");
-                }
+            Validate(resource);
 
-                UnitOfWork.Repository<T, TKey>().Update(resource);
-                UnitOfWork.Complete();
-
-                return new OkObjectResult(resource);
-            }
-            catch (Exception ex)
+            if (!id.Equals(resource.Id))
             {
-                return new BadRequestObjectResult(ex);
+                throw new ArgumentException("id mismatch");
             }
+
+            UnitOfWork.Repository<T, TKey>().Update(resource);
+            UnitOfWork.Complete();
+
+            return new OkObjectResult(resource);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(TKey id)
         {
-            try
-            {
-                var resource = UnitOfWork.Repository<T, TKey>().Get(id);
+            var resource = UnitOfWork.Repository<T, TKey>().Get(id);
 
-                UnitOfWork.Repository<T, TKey>().Remove(resource);
-                UnitOfWork.Complete();
+            UnitOfWork.Repository<T, TKey>().Remove(resource);
+            UnitOfWork.Complete();
 
-                return new NoContentResult();
-            }
-            catch (Exception ex)
+            return new NoContentResult();
+        }
+
+        #region NonActions
+        public virtual void Validate(T resource)
+        {
+            // generic validation
+            if(resource == null)
             {
-                return new BadRequestObjectResult(ex);
+                throw new ErrorException(ErrorType.General, "Erm... What do you expect me to do with that?");
             }
         }
+        #endregion
     }
 }
