@@ -13,7 +13,10 @@ namespace Vouzamo.Common.Persistence
         IPagedResults<T> Find(Expression<Func<T, bool>> predicate, int page = 1, int pageSize = int.MaxValue);
 
         void Add(T entity);
-        void AddRange(IEnumerable<T> entities);
+        void Add(IEnumerable<T> entities);
+
+        void Update(T entity);
+        void Update(IEnumerable<T> entities);
 
         void Remove(T entity);
         void Remove(IEnumerable<T> entities);

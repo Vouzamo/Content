@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Vouzamo.Common;
-using Vouzamo.Common.Models;
+using Vouzamo.Common.Models.Item;
+using Vouzamo.Common.Types;
 
 namespace Vouzamo.Persistence.Context
 {

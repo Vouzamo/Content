@@ -9,4 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vouzamo.Common\Vouzamo.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
 </Project>
