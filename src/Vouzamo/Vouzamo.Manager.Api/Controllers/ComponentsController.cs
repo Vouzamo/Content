@@ -1,27 +1,15 @@
-﻿using System;
-using Vouzamo.Common.Models.Item;
-using Vouzamo.Common.Persistence;
+﻿using Vouzamo.Common.Models.Item;
+using Vouzamo.Common.Services;
 using Vouzamo.Common.UnitOfWork;
 
 namespace Vouzamo.Manager.Api.Controllers
 {
     
-    public class ComponentsController : ResourceApiController<ComponentItem, Guid>
+    public class ComponentsController : ItemsApiController<ComponentItem>
     {
-        private readonly IManagerUnitOfWork ManagerUnitOfWork;
-
-        protected override IUnitOfWork UnitOfWork => ManagerUnitOfWork;
-
-        public ComponentsController(IManagerUnitOfWork managerUnitOfWork)
+        public ComponentsController(IManagerUnitOfWork managerUnitOfWork, IManagerService managerService) : base(managerUnitOfWork, managerService)
         {
-            ManagerUnitOfWork = managerUnitOfWork;
-        }
-
-        public override void Validate(ComponentItem resource)
-        {
-            base.Validate(resource);
-
-            // validation
+            
         }
     }
 }

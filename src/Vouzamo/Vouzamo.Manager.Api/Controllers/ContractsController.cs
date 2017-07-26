@@ -1,21 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Vouzamo.Common.Models.Item;
-using Vouzamo.Common.Persistence;
+﻿using Vouzamo.Common.Models.Item;
+using Vouzamo.Common.Services;
 using Vouzamo.Common.UnitOfWork;
 
 namespace Vouzamo.Manager.Api.Controllers
 {
-    
-    public class ContractsController : ResourceApiController<ContractItem, Guid>
+
+    public class ContractsController : ItemsApiController<ContractItem>
     {
-        private readonly IManagerUnitOfWork ManagerUnitOfWork;
-
-        protected override IUnitOfWork UnitOfWork => ManagerUnitOfWork;
-
-        public ContractsController(IManagerUnitOfWork managerUnitOfWork)
+        public ContractsController(IManagerUnitOfWork managerUnitOfWork, IManagerService managerService) : base(managerUnitOfWork, managerService)
         {
-            ManagerUnitOfWork = managerUnitOfWork;
+
         }
     }
 }

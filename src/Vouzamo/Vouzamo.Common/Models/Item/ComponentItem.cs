@@ -3,11 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Vouzamo.Common.Types;
+using Vouzamo.Common.Persistence;
+using System;
+using Vouzamo.Common.Attributes;
 
 namespace Vouzamo.Common.Models.Item
 {
-    public class ComponentItem : Item
+
+    public class ComponentItem : Item, IHasOwner<Guid>, IHasParent<Guid>
     {
+        [RequiredGuid]
+        public Guid OwnerId { get; set; }
+
+        [RequiredGuid]
+        public Guid ParentId { get; set; }
+
         [JsonIgnore]
         public string _values
         {

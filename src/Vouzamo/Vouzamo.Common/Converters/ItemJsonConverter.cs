@@ -5,6 +5,8 @@ using Vouzamo.Common.Models;
 using Vouzamo.Common.Models.Field;
 using Vouzamo.Common.Models.Item;
 using Vouzamo.Common.Types;
+using Vouzamo.Common.Models.Errors;
+using Vouzamo.Common.Models.Types;
 
 namespace Vouzamo.Common.Converters
 {
@@ -25,12 +27,20 @@ namespace Vouzamo.Common.Converters
 
             switch (fieldType)
             {
+                case ItemType.Space:
+                    return jObject.ToObject<SpaceItem>(serializer);
+                case ItemType.Repo:
+                    return jObject.ToObject<RepoItem>(serializer);
+                case ItemType.RootFolder:
+                    return jObject.ToObject<RootFolderItem>(serializer);
+                case ItemType.Folder:
+                    return jObject.ToObject<FolderItem>(serializer);
                 case ItemType.Contract:
                     return jObject.ToObject<ContractItem>(serializer);
                 case ItemType.Component:
                     return jObject.ToObject<ComponentItem>(serializer);
                 default:
-                    return null;
+                    throw new ErrorException(ErrorType.General, "I have no idea what type of item that is!");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vouzamo.Common.Models.Item;
 using Vouzamo.Common.Persistence;
 using Vouzamo.Common.Types;
 

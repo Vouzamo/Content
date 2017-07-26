@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vouzamo.Common;
 using Vouzamo.Common.Services;
 using Vouzamo.Common.Types;
 using Vouzamo.Common.UnitOfWork;
