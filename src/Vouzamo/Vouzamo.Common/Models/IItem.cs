@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vouzamo.Common.Models.Item;
 using Vouzamo.Common.Persistence;
 using Vouzamo.Common.Types;
 
 namespace Vouzamo.Common.Models
 {
-    public interface IItem : IIdentifiable<Guid>
+    public interface IItem : IIdentifiable<Guid>, IHasDiscriminator<ItemType>
     {
-        ItemType Type { get; }
         string Name { get; }
     }
 

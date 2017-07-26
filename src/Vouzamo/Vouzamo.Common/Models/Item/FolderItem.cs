@@ -7,6 +7,8 @@ namespace Vouzamo.Common.Models.Item
 {
     public class FolderItem : Item, IHasOwner<Guid>, IHasChildren<Guid>, IHasParent<Guid>
     {
+        public ItemType AllowedItemTypes => (ItemType.Folder | ItemType.Contract | ItemType.Component);
+
         [RequiredGuid]
         public Guid OwnerId { get; set; }
 
@@ -16,11 +18,6 @@ namespace Vouzamo.Common.Models.Item
         public FolderItem() : base()
         {
             Type = ItemType.Folder;
-        }
-
-        public bool IsValidChild<T>(T child) where T : IHasParent<Guid>
-        {
-            return (ItemType.Folder | ItemType.Contract | ItemType.Component).HasFlag(child.Type);
         }
     }
 }

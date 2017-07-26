@@ -7,22 +7,15 @@ namespace Vouzamo.Common.Models.Item
 {
     public class RepoItem : Item, IHasParent<Guid>, IHasChildren<Guid>, IHasOwnership<Guid>
     {
+        public ItemType AllowedItemTypes => (ItemType.Repo | ItemType.RootFolder);
+        public ItemType AllowedOwnerItemTypes => (ItemType.RootFolder | ItemType.Folder | ItemType.Contract | ItemType.Component);
+
         [RequiredGuid]
         public Guid ParentId { get; set; }
 
         public RepoItem() : base()
         {
             Type = ItemType.Repo;
-        }
-
-        public bool IsValidChild<T>(T child) where T : IHasParent<Guid>
-        {
-            return (ItemType.Repo | ItemType.RootFolder).HasFlag(child.Type);
-        }
-
-        public bool IsValidOwned<T>(T owned) where T : IHasOwner<Guid>
-        {
-            return (ItemType.RootFolder | ItemType.Folder | ItemType.Contract | ItemType.Component).HasFlag(owned.Type);
         }
     }
 }

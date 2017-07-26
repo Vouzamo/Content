@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vouzamo.Common.Models;
 using Vouzamo.Common.Models.Errors;
 using Vouzamo.Common.Models.Item;
@@ -18,6 +19,41 @@ namespace Vouzamo.Manager.Services
             ManagerUnitOfWork = managerUnitOfWork;
         }
 
+        public Stack<IItem> OwnerHierarchy(IItem subject)
+        {
+            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
+
+            if(subject is IHasOwner<Guid>)
+            {
+                var owned = subject as IHasOwner<Guid>;
+
+                subject = repository.Get(owned.OwnerId);
+
+                return ParentHierarchy(subject);
+            }
+
+            return new Stack<IItem>();
+        }
+
+        public Stack<IItem> ParentHierarchy(IItem subject)
+        {
+            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
+            var hierarchy = new Stack<IItem>();
+
+            hierarchy.Push(subject);
+
+            while(subject is IHasParent<Guid>)
+            {
+                var child = subject as IHasParent<Guid>;
+
+                subject = repository.Get(child.ParentId);
+
+                hierarchy.Push(subject);
+            }
+
+            return hierarchy;
+        }
+
         public void Validate<T>(T item) where T : IItem
         {
             if (item is IHasParent<Guid>)
@@ -30,7 +66,7 @@ namespace Vouzamo.Manager.Services
                 {
                     var parent = result as IHasChildren<Guid>;
 
-                    if (!parent.IsValidChild(child))
+                    if (!parent.AllowedItemTypes.HasFlag(child.Type))
                     {
                         throw new ErrorException(ErrorType.General, "Invalid parent type");
                     }
@@ -51,7 +87,7 @@ namespace Vouzamo.Manager.Services
                 {
                     var owner = result as IHasOwnership<Guid>;
 
-                    if(!owner.IsValidOwned(owned))
+                    if(!owner.AllowedOwnerItemTypes.HasFlag(owned.Type))
                     {
                         throw new ErrorException(ErrorType.General, "Invalid owner type");
                     }

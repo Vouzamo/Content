@@ -6,14 +6,11 @@ namespace Vouzamo.Common.Models.Item
 {
     public class SpaceItem : Item, IHasChildren<Guid>
     {
+        public ItemType AllowedItemTypes => (ItemType.Repo);
+
         public SpaceItem() : base()
         {
             Type = ItemType.Space;
-        }
-
-        public bool IsValidChild<T>(T child) where T : IHasParent<Guid>
-        {
-            return (ItemType.Repo).HasFlag(child.Type);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Vouzamo.Common.Models;
+using Vouzamo.Common.Types;
 
 namespace Vouzamo.Common.Persistence
 {
@@ -8,23 +8,28 @@ namespace Vouzamo.Common.Persistence
         TId Id { get; }
     }
 
-    public interface IHasParent<TId> : IItem
+    public interface IHasDiscriminator<T>
+    {
+        T Type { get; }
+    }
+
+    public interface IHasParent<TId> : IHasDiscriminator<ItemType>
     {
         TId ParentId { get; }
     }
 
     public interface IHasChildren<TId>
     {
-        bool IsValidChild<T>(T child) where T : IHasParent<TId>;
+        ItemType AllowedItemTypes { get; }
     }
 
-    public interface IHasOwner<TId> : IItem
+    public interface IHasOwner<TId> : IHasDiscriminator<ItemType>
     {
         TId OwnerId { get; }
     }
 
     public interface IHasOwnership<TId>
     {
-        bool IsValidOwned<T>(T owned) where T : IHasOwner<TId>;
+        ItemType AllowedOwnerItemTypes { get; }
     }
 }

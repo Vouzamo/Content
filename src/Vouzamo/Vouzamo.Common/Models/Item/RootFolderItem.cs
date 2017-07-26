@@ -10,14 +10,11 @@ namespace Vouzamo.Common.Models.Item
         [RequiredGuid]
         public Guid OwnerId { get; set; }
 
+        public ItemType AllowedItemTypes => (ItemType.Folder | ItemType.Contract | ItemType.Component);
+
         public RootFolderItem() : base()
         {
             Type = ItemType.RootFolder;
-        }
-
-        public bool IsValidChild<T>(T child) where T : IHasParent<Guid>
-        {
-            return (ItemType.Folder | ItemType.Contract | ItemType.Component).HasFlag(child.Type);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Vouzamo.Manager.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] T resource)
         {
-            Validate(resource);
+            BeforeWrite(resource);
 
             UnitOfWork.Repository<T, TKey>().Add(resource);
             UnitOfWork.Complete();
@@ -42,7 +42,7 @@ namespace Vouzamo.Manager.Api.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(TKey id, [FromBody] T resource)
         {
-            Validate(resource);
+            BeforeWrite(resource);
 
             if (!id.Equals(resource.Id))
             {
@@ -67,7 +67,7 @@ namespace Vouzamo.Manager.Api.Controllers
         }
 
         #region NonActions
-        public virtual void Validate(T resource)
+        public virtual void BeforeWrite(T resource)
         {
             // generic validation
             if(resource == null)
