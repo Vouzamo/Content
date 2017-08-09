@@ -19,25 +19,9 @@ namespace Vouzamo.Manager.Services
             ManagerUnitOfWork = managerUnitOfWork;
         }
 
-        public Stack<IItem> OwnerHierarchy(IItem subject)
-        {
-            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
-
-            if(subject is IHasOwner<Guid>)
-            {
-                var owned = subject as IHasOwner<Guid>;
-
-                subject = repository.Get(owned.OwnerId);
-
-                return ParentHierarchy(subject);
-            }
-
-            return new Stack<IItem>();
-        }
-
         public Stack<IItem> ParentHierarchy(IItem subject)
         {
-            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
+            var repository = ManagerUnitOfWork.Repository<IItem, Guid>();
             var hierarchy = new Stack<IItem>();
 
             hierarchy.Push(subject);
@@ -54,17 +38,41 @@ namespace Vouzamo.Manager.Services
             return hierarchy;
         }
 
+        public IPagedResults<Item> Children(IItem item, int page = 1, int pageSize = int.MaxValue)
+        {
+            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
+
+            List<IItem> items = new List<IItem>();
+
+            return repository.Find(x => x.ParentId.HasValue && x.ParentId.Value == item.Id, page, pageSize);
+        }
+
         public void Validate<T>(T item) where T : IItem
         {
-            if (item is IHasParent<Guid>)
+            var repository = ManagerUnitOfWork.Repository<Item, Guid>();
+
+            // Uniqueness Validation
+            var nameClashes = repository.Find(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase) && x.ParentId.Value == item.ParentId.Value, 1, 1);
+            if(nameClashes.Count > 0)
             {
-                var child = item as IHasParent<Guid>;
+                throw new ErrorException(ErrorType.General, $"{nameof(item.Name)} must be unique within containing item.");
+            }
 
-                var result = ManagerUnitOfWork.Repository<Item, Guid>().Get(child.ParentId);
+            // Parent Validation
+            if (item is IHasParent<Guid?>)
+            {
+                var child = item as IHasParent<Guid?>;
 
-                if (result is IHasChildren<Guid>)
+                if(!child.ParentId.HasValue)
                 {
-                    var parent = result as IHasChildren<Guid>;
+                    throw new ErrorException(ErrorType.General, "Parent is not defined");
+                }
+
+                var result = ManagerUnitOfWork.Repository<Item, Guid>().Get(child.ParentId.Value);
+
+                if (result is IHasChildren)
+                {
+                    var parent = result as IHasChildren;
 
                     if (!parent.AllowedItemTypes.HasFlag(child.Type))
                     {
@@ -77,25 +85,12 @@ namespace Vouzamo.Manager.Services
                 }
             }
 
-            if(item is IHasOwner<Guid>)
+            // Component Validation
+            if(item is ComponentItem)
             {
-                var owned = item as IHasOwner<Guid>;
+                var componentItem = item as ComponentItem;
 
-                var result = ManagerUnitOfWork.Repository<Item, Guid>().Get(owned.OwnerId);
-
-                if(result is IHasOwnership<Guid>)
-                {
-                    var owner = result as IHasOwnership<Guid>;
-
-                    if(!owner.AllowedOwnerItemTypes.HasFlag(owned.Type))
-                    {
-                        throw new ErrorException(ErrorType.General, "Invalid owner type");
-                    }
-                }
-                else
-                {
-                    throw new ErrorException(ErrorType.General, "Invalid owner type");
-                }
+                var contractItem = ManagerUnitOfWork.Repository<ContractItem, Guid>().Get(componentItem.ContractId);
             }
         }
     }

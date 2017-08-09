@@ -18,18 +18,8 @@ namespace Vouzamo.Common.Persistence
         TId ParentId { get; }
     }
 
-    public interface IHasChildren<TId>
+    public interface IHasChildren
     {
         ItemType AllowedItemTypes { get; }
-    }
-
-    public interface IHasOwner<TId> : IHasDiscriminator<ItemType>
-    {
-        TId OwnerId { get; }
-    }
-
-    public interface IHasOwnership<TId>
-    {
-        ItemType AllowedOwnerItemTypes { get; }
     }
 }

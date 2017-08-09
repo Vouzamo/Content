@@ -18,17 +18,15 @@ namespace Vouzamo.Persistence.Context
             modelBuilder.Entity<Item>().HasDiscriminator(x => x.Type)
                 .HasValue<SpaceItem>(ItemType.Space)
                 .HasValue<RepoItem>(ItemType.Repo)
-                .HasValue<RootFolderItem>(ItemType.RootFolder)
                 .HasValue<FolderItem>(ItemType.Folder)
                 .HasValue<ContractItem>(ItemType.Contract)
                 .HasValue<ComponentItem>(ItemType.Component);
 
             modelBuilder.Entity<SpaceItem>().HasBaseType<Item>();
             modelBuilder.Entity<RepoItem>().HasBaseType<Item>();
-            modelBuilder.Entity<RootFolderItem>().HasBaseType<Item>();
             modelBuilder.Entity<FolderItem>().HasBaseType<Item>();
-            modelBuilder.Entity<ContractItem>().HasBaseType<Item>();
-            modelBuilder.Entity<ComponentItem>().HasBaseType<Item>();
+            modelBuilder.Entity<ContractItem>().HasBaseType<Item>().Property(x => x._fields).HasColumnName("Fields");
+            modelBuilder.Entity<ComponentItem>().HasBaseType<Item>().Property(x => x._values).HasColumnName("Values");
 
             base.OnModelCreating(modelBuilder);
         }

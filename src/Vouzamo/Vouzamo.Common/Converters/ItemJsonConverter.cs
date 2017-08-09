@@ -31,8 +31,6 @@ namespace Vouzamo.Common.Converters
                     return jObject.ToObject<SpaceItem>(serializer);
                 case ItemType.Repo:
                     return jObject.ToObject<RepoItem>(serializer);
-                case ItemType.RootFolder:
-                    return jObject.ToObject<RootFolderItem>(serializer);
                 case ItemType.Folder:
                     return jObject.ToObject<FolderItem>(serializer);
                 case ItemType.Contract:

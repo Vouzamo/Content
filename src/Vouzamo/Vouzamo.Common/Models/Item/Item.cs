@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Vouzamo.Common.Attributes;
 using Vouzamo.Common.Types;
 
 namespace Vouzamo.Common.Models.Item
@@ -9,6 +10,9 @@ namespace Vouzamo.Common.Models.Item
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
+        [RequiredGuid]
+        public Guid? ParentId { get; set; }
 
         [Required]
         public ItemType Type { get; protected set; }

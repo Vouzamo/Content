@@ -12,8 +12,7 @@ namespace Vouzamo.Common.Types
         [Display(Name = "Repository")]
         Repo = 2,
 
-        [Display(Name = "Root Folder")]
-        RootFolder = 4,
+        // ? = 4
 
         [Display(Name = "Folder")]
         Folder = 8,

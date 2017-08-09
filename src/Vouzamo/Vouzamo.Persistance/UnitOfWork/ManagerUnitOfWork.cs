@@ -7,7 +7,7 @@ namespace Vouzamo.Persistence.UnitOfWork
     {
         public ManagerUnitOfWork(ManagerContext context) : base(context)
         {
-
+            
         }
     }
 }

@@ -10,14 +10,8 @@ using Vouzamo.Common.Attributes;
 namespace Vouzamo.Common.Models.Item
 {
 
-    public class ComponentItem : Item, IHasOwner<Guid>, IHasParent<Guid>
+    public class ComponentItem : Item, IHasParent<Guid?>
     {
-        [RequiredGuid]
-        public Guid OwnerId { get; set; }
-
-        [RequiredGuid]
-        public Guid ParentId { get; set; }
-
         [JsonIgnore]
         public string _values
         {
@@ -43,6 +37,9 @@ namespace Vouzamo.Common.Models.Item
 
         [NotMapped]
         public Dictionary<string, Dictionary<string, Value>> Values { get; protected set; }
+
+        [RequiredGuid]
+        public Guid ContractId { get; set; }
 
         public ComponentItem() : base()
         {

@@ -10,14 +10,8 @@ using Vouzamo.Common.Attributes;
 
 namespace Vouzamo.Common.Models.Item
 {
-    public class ContractItem : Item, IHasOwner<Guid>, IHasParent<Guid>, IHasFields
+    public class ContractItem : Item, IHasParent<Guid?>, IHasFields
     {
-        [RequiredGuid]
-        public Guid OwnerId { get; set; }
-
-        [RequiredGuid]
-        public Guid ParentId { get; set; }
-
         [JsonIgnore]
         public string _fields
         {

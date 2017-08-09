@@ -7,6 +7,7 @@ namespace Vouzamo.Common.Models
 {
     public interface IItem : IIdentifiable<Guid>, IHasDiscriminator<ItemType>
     {
+        Guid? ParentId { get; }
         string Name { get; }
     }
 

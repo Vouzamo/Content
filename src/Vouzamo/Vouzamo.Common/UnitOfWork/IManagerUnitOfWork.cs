@@ -4,6 +4,6 @@ namespace Vouzamo.Common.UnitOfWork
 {
     public interface IManagerUnitOfWork : IUnitOfWork
     {
-
+        
     }
 }
